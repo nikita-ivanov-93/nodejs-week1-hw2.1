@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const LIMIT = process.env.LIMIT*1000;
+const DELAY = process.env.DELAY*1000;
 const PORT = 3000;
 
 let data = []
