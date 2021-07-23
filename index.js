@@ -4,29 +4,21 @@ const LIMIT = process.env.LIMIT*1000;
 const DELAY = process.env.DELAY*1000;
 const PORT = 3000;
 
-let data = []
-let now = "";
 app.get("/date", (req, res, next) => {
+  let now = "";
   console.log('got GET-request');
   res.setHeader("Content-Type", "text/html; charset=utf-8")
   res.setHeader("Transfer-Incoding", "chunked")
+  const interval = setInterval(function run() {
+    console.log(now);
+    now = new Date();
+  }, DELAY)
   setTimeout(function stop(){
-    data.map((res,i) => {
-      now = new Date();
-      res.write(`Hello ${i}! Date: ${now}.\n`);
-      res.end();
-    })
-    data = [];
-    process.exit(0);
-    
+    now = new Date();
+    res.write(`Date: ${now}.\n`);
+    clearInterval(interval);
+    res.end();
   }, LIMIT)
-  data.push(res);
-  if (data.length===1) {
-    setInterval(function run() {
-      console.log(now);
-      now = new Date();
-    }, DELAY)
-  }  
 })
 
 app.listen(PORT, ()=> {
